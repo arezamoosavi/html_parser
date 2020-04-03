@@ -3,7 +3,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 import json
 
-parse_result = {'Name':[],'Art':[], 'About':[], 'Price':[]}
+parse_result = {}
 
 with zipfile.ZipFile("lot-parser.zip", "r") as zip:
     html_file_path = [item.filename for item in zip.filelist if item.filename.endswith('.html')]
@@ -47,8 +47,11 @@ with zipfile.ZipFile("lot-parser.zip", "r") as zip:
             continue
 
         # Save to dict
-        # break
-    
-    """
-    with open('parsed_html.json', 'w') as fp:
-        json.dump(parse_result, fp)"""
+        # parse_result.update({'Artist':Artist,'ArtName':ArtName, 'About':About, 'Price':Price})
+        parse_result[Artist] = {'ArtName':ArtName, 'About':About, 'Price':Price}
+
+# print(parse_result)
+
+
+with open('parsed_html.json', 'w') as fp:
+    json.dump(parse_result, fp)
