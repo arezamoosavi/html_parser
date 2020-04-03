@@ -1,6 +1,9 @@
 import zipfile
 import pandas as pd
 from bs4 import BeautifulSoup
+import json
+
+parse_result = {'Name':[],'Art':[], 'About':[], 'Price':[]}
 
 with zipfile.ZipFile("lot-parser.zip", "r") as zip:
     html_file_path = [item.filename for item in zip.filelist if item.filename.endswith('.html')]
@@ -11,12 +14,17 @@ with zipfile.ZipFile("lot-parser.zip", "r") as zip:
         print('\n','*'*5,file,'*'*5,'\n')
         htmlfile = zip.read(file).decode("utf-8")
         # bs1 = BeautifulSoup(htmlfile, "html.parser")
-        # print(bs1,'\n\n\n')
         bs2 = BeautifulSoup(htmlfile, "html5lib")
         
         p1 = bs2.find('div')
         p11 = [item.strip().replace('  ', ' ') for item in p1.contents]
-        print(p11)
+        
+        p21 = list(map(lambda x:x.strip(), p11[0].split("\n")))
+        jj = ' '.join(p21[2:])
+
+        print(jj)
+        print(len(p21))
+        # break
         
         s1 = bs2.find('span')
         if s1:
@@ -33,5 +41,9 @@ with zipfile.ZipFile("lot-parser.zip", "r") as zip:
         s2 = s1.find_next()
         print(s2.contents)
 
-        
-        # break
+        # Save to dict
+        break
+    
+    """
+    with open('parsed_html.json', 'w') as fp:
+        json.dump(parse_result, fp)"""
