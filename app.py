@@ -20,29 +20,34 @@ with zipfile.ZipFile("lot-parser.zip", "r") as zip:
         p11 = [item.strip().replace('  ', ' ') for item in p1.contents]
         
         p21 = list(map(lambda x:x.strip(), p11[0].split("\n")))
-        jj = ' '.join(p21[2:])
-
-        print(jj)
-        print(len(p21))
-        # break
+        Artist = p21[0]
+        ArtName = p21[1]
+        About = ' '.join(p21[2:])
+        
+        print('Artist: ', Artist)
+        print('ArtName: ', ArtName)
+        print('About: ', About)
         
         s1 = bs2.find('span')
         if s1:
-            print(s1.contents)
+            s2 = s1.find_next()
+            Price = ' '.join([s1.contents[0], s2.contents[0]])
+            print('Price: ',Price)
         else:
-            # print(bs2)
-            p2 = p1.find_next()
-            print(p2.contents)
-            p3 = p2.find_next()
-            print(p3.contents)
-            continue
-            # break
+            s1 = p1.find_next()
+            print(s1.contents)
 
-        s2 = s1.find_next()
-        print(s2.contents)
+            s2 = s1.find_next()
+            print(s2.contents)
+
+            # Price = ' '.join([s2.contents[0], s1.contents[0]])
+            Price = s2.contents[0]
+            print('Price: ',Price)
+            # break
+            continue
 
         # Save to dict
-        break
+        # break
     
     """
     with open('parsed_html.json', 'w') as fp:
